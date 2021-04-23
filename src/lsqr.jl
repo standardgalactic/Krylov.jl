@@ -82,7 +82,7 @@ function lsqr(A, b :: AbstractVector{T};
 
   m, n = size(A)
   size(b, 1) == m || error("Inconsistent problem size")
-  (verbose > 0) && @printf("LSQR: system of %d equations in %d variables\n", m, n)
+  (verbose > 0) && @info @sprintf("LSQR: system of %d equations in %d variables\n", m, n)
 
   # Tests M == Iₙ and N == Iₘ
   MisI = isa(M, opEye)
@@ -136,8 +136,8 @@ function lsqr(A, b :: AbstractVector{T};
   iter = 0
   itmax == 0 && (itmax = m + n)
 
-  (verbose > 0) && @printf("%5s  %7s  %7s  %7s  %7s  %7s  %7s  %7s  %7s\n", "Aprod", "α", "β", "‖r‖", "‖Aᵀr‖", "compat", "backwrd", "‖A‖", "κ(A)")
-  display(iter, verbose) && @printf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e\n", 1, β₁, α, β₁, α, 0, 1, Anorm, Acond)
+  (verbose > 0) && @info @sprintf("%5s  %7s  %7s  %7s  %7s  %7s  %7s  %7s  %7s\n", "Aprod", "α", "β", "‖r‖", "‖Aᵀr‖", "compat", "backwrd", "‖A‖", "κ(A)")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e\n", 1, β₁, α, β₁, α, 0, 1, Anorm, Acond)
 
   # Aᵀb = 0 so x = 0 is a minimum least-squares solution
   α == 0 && return (x, SimpleStats(true, false, [β₁], [zero(T)], "x = 0 is a minimum least-squares solution"))
@@ -272,7 +272,7 @@ function lsqr(A, b :: AbstractVector{T};
     t1    = test1 / (one(T) + Anorm * xNorm / β₁)
     rNormtol = btol + axtol * Anorm * xNorm / β₁
 
-    display(iter, verbose) && @printf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e\n", 1 + 2 * iter, α, β, rNorm, ArNorm, test1, test2, Anorm, Acond)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e  %7.1e\n", 1 + 2 * iter, α, β, rNorm, ArNorm, test1, test2, Anorm, Acond)
 
     # Stopping conditions that do not depend on user input.
     # This is to guard against tolerances that are unreasonably small.

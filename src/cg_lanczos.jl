@@ -40,7 +40,7 @@ function cg_lanczos(A, b :: AbstractVector{T};
 
   n = size(b, 1)
   (size(A, 1) == n & size(A, 2) == n) || error("Inconsistent problem size")
-  (verbose > 0) && @printf("CG Lanczos: system of %d equations in %d variables\n", n, n)
+  (verbose > 0) && @info @sprintf("CG Lanczos: system of %d equations in %d variables\n", n, n)
 
   # Determine the storage type of b
   S = typeof(b)
@@ -80,8 +80,8 @@ function cg_lanczos(A, b :: AbstractVector{T};
   rNorm = σ
   rNorms = history ? [rNorm] : T[]
   ε = atol + rtol * rNorm
-  (verbose > 0) && @printf("%5s  %7s\n", "k", "‖rₖ‖")
-  display(iter, verbose) && @printf("%5d  %7.1e\n", iter, rNorm)
+  (verbose > 0) && @info @sprintf("%5s  %7s\n", "k", "‖rₖ‖")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, rNorm)
 
   indefinite = false
   solved = rNorm ≤ ε
@@ -123,7 +123,7 @@ function cg_lanczos(A, b :: AbstractVector{T};
     rNorm = abs(σ)          # ‖rₖ₊₁‖_M = |σₖ₊₁| because rₖ₊₁ = σₖ₊₁ * vₖ₊₁ and ‖vₖ₊₁‖_M = 1
     history && push!(rNorms, rNorm)
     iter = iter + 1
-    display(iter, verbose) && @printf("%5d  %8.1e\n", iter, rNorm)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, rNorm)
     solved = rNorm ≤ ε
     tired = iter ≥ itmax
   end
@@ -158,7 +158,7 @@ function cg_lanczos_shift_seq(A, b :: AbstractVector{T}, shifts :: AbstractVecto
   (size(A, 1) == n & size(A, 2) == n) || error("Inconsistent problem size")
 
   nshifts = size(shifts, 1)
-  (verbose > 0) && @printf("CG Lanczos: system of %d equations in %d variables with %d shifts\n", n, n, nshifts)
+  (verbose > 0) && @info @sprintf("CG Lanczos: system of %d equations in %d variables with %d shifts\n", n, n, nshifts)
 
   # Determine the storage type of b
   S = typeof(b)
@@ -211,7 +211,7 @@ function cg_lanczos_shift_seq(A, b :: AbstractVector{T}, shifts :: AbstractVecto
   if display(iter, verbose)
     fmt = "%5d" * repeat("  %8.1e", nshifts) * "\n"
     # precompile printf for our particular format
-    local_printf(data...) = Core.eval(Main, :(@printf($fmt, $(data)...)))
+    local_printf(data...) = Core.eval(Main, :(@info @sprintf($fmt, $(data)...)))
     local_printf(iter, rNorms...)
   end
 

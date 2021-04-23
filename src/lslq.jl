@@ -111,7 +111,7 @@ function lslq(A, b :: AbstractVector{T};
 
   m, n = size(A)
   size(b, 1) == m || error("Inconsistent problem size")
-  (verbose > 0) && @printf("LSLQ: system of %d equations in %d variables\n", m, n)
+  (verbose > 0) && @info @sprintf("LSLQ: system of %d equations in %d variables\n", m, n)
 
   # Tests M == Iₙ and N == Iₘ
   MisI = isa(M, opEye)
@@ -201,8 +201,8 @@ function lslq(A, b :: AbstractVector{T};
   iter = 0
   itmax == 0 && (itmax = m + n)
 
-  (verbose > 0) && @printf("%5s  %7s  %7s  %7s  %7s  %8s  %8s  %7s  %7s  %7s\n", "Aprod", "‖r‖", "‖Aᵀr‖", "β", "α", "cos", "sin", "‖A‖²", "κ(A)", "‖xL‖")
-  display(iter, verbose) && @printf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %8.1e  %8.1e  %7.1e  %7.1e  %7.1e\n", 1, rNorm, ArNorm, β, α, c, s, Anorm², Acond, xlqNorm)
+  (verbose > 0) && @info @sprintf("%5s  %7s  %7s  %7s  %7s  %8s  %8s  %7s  %7s  %7s\n", "Aprod", "‖r‖", "‖Aᵀr‖", "β", "α", "cos", "sin", "‖A‖²", "κ(A)", "‖xL‖")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %8.1e  %8.1e  %7.1e  %7.1e  %7.1e\n", 1, rNorm, ArNorm, β, α, c, s, Anorm², Acond, xlqNorm)
 
   status = "unknown"
   solved = solved_mach = solved_lim = (rNorm ≤ atol)
@@ -311,7 +311,7 @@ function lslq(A, b :: AbstractVector{T};
     t1    = test1 / (one(T) + Anorm * xlqNorm / β₁)
     rtol  = btol + atol * Anorm * xlqNorm / β₁
 
-    display(iter, verbose) && @printf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %8.1e  %8.1e  %7.1e  %7.1e  %7.1e\n", 1 + 2 * iter, rNorm, ArNorm, β, α, c, s, Anorm, Acond, xlqNorm)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e  %7.1e  %7.1e  %7.1e  %8.1e  %8.1e  %7.1e  %7.1e  %7.1e\n", 1 + 2 * iter, rNorm, ArNorm, β, α, c, s, Anorm, Acond, xlqNorm)
 
     # update LSLQ point for next iteration
     @kaxpy!(n, c * ζ, w̄, x_lq)

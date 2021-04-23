@@ -49,7 +49,7 @@ function usymlq(A, b :: AbstractVector{T}, c :: AbstractVector{T};
   m, n = size(A)
   length(b) == m || error("Inconsistent problem size")
   length(c) == n || error("Inconsistent problem size")
-  (verbose > 0) && @printf("USYMLQ: system of %d equations in %d variables\n", m, n)
+  (verbose > 0) && @info @sprintf("USYMLQ: system of %d equations in %d variables\n", m, n)
 
   # Check type consistency
   eltype(A) == T || error("eltype(A) ≠ $T")
@@ -70,8 +70,8 @@ function usymlq(A, b :: AbstractVector{T}, c :: AbstractVector{T};
 
   rNorms = history ? [bNorm] : T[]
   ε = atol + rtol * bNorm
-  (verbose > 0) && @printf("%5s  %7s\n", "k", "‖rₖ‖")
-  display(iter, verbose) && @printf("%5d  %7.1e\n", iter, bNorm)
+  (verbose > 0) && @info @sprintf("%5s  %7s\n", "k", "‖rₖ‖")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, bNorm)
 
   # Set up workspace.
   βₖ = @knrm2(m, b)          # β₁ = ‖v₁‖
@@ -228,7 +228,7 @@ function usymlq(A, b :: AbstractVector{T}, c :: AbstractVector{T};
     solved_lq = rNorm_lq ≤ ε
     solved_cg = transfer_to_usymcg && (δbarₖ ≠ 0) && (rNorm_cg ≤ ε)
     tired = iter ≥ itmax
-    display(iter, verbose) && @printf("%5d  %7.1e\n", iter, rNorm_lq)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, rNorm_lq)
   end
   (verbose > 0) && @printf("\n")
 

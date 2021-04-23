@@ -71,7 +71,7 @@ function lnlq(A, b :: AbstractVector{T};
 
   m, n = size(A)
   length(b) == m || error("Inconsistent problem size")
-  (verbose > 0) && @printf("LNLQ: system of %d equations in %d variables\n", m, n)
+  (verbose > 0) && @info @sprintf("LNLQ: system of %d equations in %d variables\n", m, n)
 
   # Tests M == Iₘ and N == Iₙ
   MisI = isa(M, opEye)
@@ -104,8 +104,8 @@ function lnlq(A, b :: AbstractVector{T};
   iter = 0
   itmax == 0 && (itmax = m + n)
 
-  (verbose > 0) && @printf("%5s  %7s\n", "k", "‖rₖ‖")
-  display(iter, verbose) && @printf("%5d  %7.1e\n", iter, bNorm)
+  (verbose > 0) && @info @sprintf("%5s  %7s\n", "k", "‖rₖ‖")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, bNorm)
 
   # Update iteration index
   iter = iter + 1
@@ -317,7 +317,7 @@ function lnlq(A, b :: AbstractVector{T};
     tired = iter ≥ itmax
     solved_lq = rNorm_lq ≤ ε
     solved_cg = transfer_to_craig && rNorm_cg ≤ ε
-    display(iter, verbose) && @printf("%5d  %7.1e\n", iter, rNorm_lq)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, rNorm_lq)
 
     # Update iteration index.
     iter = iter + 1

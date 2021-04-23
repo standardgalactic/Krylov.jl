@@ -36,7 +36,7 @@ function bilq(A, b :: AbstractVector{T}; c :: AbstractVector{T}=b,
   n, m = size(A)
   m == n || error("System must be square")
   length(b) == m || error("Inconsistent problem size")
-  (verbose > 0) && @printf("BILQ: system of size %d\n", n)
+  (verbose > 0) && @info @sprintf("BILQ: system of size %d\n", n)
 
   # Check type consistency
   eltype(A) == T || error("eltype(A) ≠ $T")
@@ -57,8 +57,8 @@ function bilq(A, b :: AbstractVector{T}; c :: AbstractVector{T}=b,
 
   rNorms = history ? [bNorm] : T[]
   ε = atol + rtol * bNorm
-  (verbose > 0) && @printf("%5s  %7s\n", "k", "‖rₖ‖")
-  display(iter, verbose) && @printf("%5d  %7.1e\n", iter, bNorm)
+  (verbose > 0) && @info @sprintf("%5s  %7s\n", "k", "‖rₖ‖")
+  display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, bNorm)
 
   # Initialize the Lanczos biorthogonalization process.
   bᵗc = @kdot(n, b, c)  # ⟨b,c⟩
@@ -226,7 +226,7 @@ function bilq(A, b :: AbstractVector{T}; c :: AbstractVector{T}=b,
     solved_cg = transfer_to_bicg && (δbarₖ ≠ 0) && (rNorm_cg ≤ ε)
     tired = iter ≥ itmax
     breakdown = !solved_lq && !solved_cg && (qᵗp == 0)
-    display(iter, verbose) && @printf("%5d  %7.1e\n", iter, rNorm_lq)
+    display(iter, verbose) && @info @sprintf("%5d  %7.1e\n", iter, rNorm_lq)
   end
   (verbose > 0) && @printf("\n")
 
